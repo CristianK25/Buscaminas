@@ -6,7 +6,6 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import logica.buscaminas.Dificultad;
 import logica.buscaminas.Tablero;
-
 /**
  *
  * @author windows
@@ -37,6 +36,7 @@ public class VentanaBuscaminas extends javax.swing.JFrame {
         }
         this.pack(); // Ajusta el JFrame al tamaño preferido de sus componentes
         this.setLocationRelativeTo(null); // Centra la ventana
+        cantidadDeBombas.setText(tablero.getCantidadBombas()+"");
     }
 
     private void eleccionDificultad(){
@@ -63,11 +63,15 @@ public class VentanaBuscaminas extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * 
+     * @param pos
+     * @param boton 
+     */
     private void manejarCasillas(int[] pos, JButton boton){
         int i = pos[0], j = pos[1];
-        if (tablero.getArregloCasillas()[i][j].isTieneBomba()){
-            
-        }
+        if (boton.getIcon() != null) return;
+        tablero.manejarCantidadBombas();
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -128,6 +132,7 @@ public class VentanaBuscaminas extends javax.swing.JFrame {
         textoCantidadBombas.setText("Bombas:");
 
         cantidadDeBombas.setEditable(false);
+        cantidadDeBombas.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

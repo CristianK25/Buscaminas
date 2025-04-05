@@ -38,7 +38,7 @@ public final class Tablero {
         }
         
         while(cantidadBombas != 0){
-            int fila = random.nextInt(0, 9), columna = random.nextInt(0, 9);
+            int fila = random.nextInt(0, 8), columna = random.nextInt(0, 8);
             // Evitar zona central (ej: radio de 1 casilla alrededor del centro)
             boolean esCentro = Math.abs(fila - arregloCasillas.length/2) <= 1 && Math.abs(columna - arregloCasillas.length/2) <= 1;
             if (esCentro) continue;
