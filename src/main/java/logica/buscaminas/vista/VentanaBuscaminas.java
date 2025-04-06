@@ -1,7 +1,9 @@
 package logica.buscaminas.vista;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import logica.buscaminas.Dificultad;
@@ -24,19 +26,22 @@ public class VentanaBuscaminas extends javax.swing.JFrame {
     
         // Aumenta el tamaño del panel para que quepan 8x8 botones de 28x28 px
          panelCasillas.setPreferredSize(new Dimension(28 * 8, 28 * 8));
-
+         
+        //Inicializo los botones en el panel 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 JButton boton = new JButton();
                 boton.setPreferredSize(new Dimension(28, 28));
                 final int fila = i, columna = j;
-                boton.addActionListener(e -> manejarCasillas(new int[]{fila, columna}, boton));
+                //Accion del boton al pulsarlo dependiendo si esta activado el modo bandera
+                boton.addActionListener(e -> 
+                        manejarCasillas(new int[]{fila, columna}, boton));
                 panelCasillas.add(boton);
             }
         }
         this.pack(); // Ajusta el JFrame al tamaño preferido de sus componentes
         this.setLocationRelativeTo(null); // Centra la ventana
-        cantidadDeBombas.setText(tablero.getCantidadBombas()+"");
+        cantidadDeBombas.setText(String.valueOf(tablero.getCantidadBombas()));
     }
 
     private void eleccionDificultad(){
@@ -70,9 +75,21 @@ public class VentanaBuscaminas extends javax.swing.JFrame {
      */
     private void manejarCasillas(int[] pos, JButton boton){
         int i = pos[0], j = pos[1];
-        if (boton.getIcon() != null) return;
-        tablero.manejarCantidadBombas();
+        if (botonCambioModo.isSelected()){
+            if("".equals(boton.getText())) {
+                boton.setForeground(Color.red);
+                boton.setText("🚩");
+            } else boton.setText("");
+        }else if("".equals(boton.getText())) {
+            tablero.manejarCantidadBombas();
+            /* Para poner bombas cuando pierda
+            boton.setForeground(Color.BLACK);
+            boton.setText("💣");
+            */
+            
+        }       
     }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -87,6 +104,7 @@ public class VentanaBuscaminas extends javax.swing.JFrame {
         panelCasillas = new javax.swing.JPanel();
         textoCantidadBombas = new javax.swing.JLabel();
         cantidadDeBombas = new javax.swing.JTextField();
+        botonCambioModo = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -132,7 +150,15 @@ public class VentanaBuscaminas extends javax.swing.JFrame {
         textoCantidadBombas.setText("Bombas:");
 
         cantidadDeBombas.setEditable(false);
+        cantidadDeBombas.setBackground(new java.awt.Color(255, 255, 255));
+        cantidadDeBombas.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
+        cantidadDeBombas.setForeground(new java.awt.Color(0, 102, 102));
+        cantidadDeBombas.setCaretColor(new java.awt.Color(0, 102, 102));
         cantidadDeBombas.setEnabled(false);
+
+        botonCambioModo.setFont(new java.awt.Font("Segoe UI Black", 3, 14)); // NOI18N
+        botonCambioModo.setForeground(new java.awt.Color(0, 102, 102));
+        botonCambioModo.setText("Colocar Bandera");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -144,7 +170,9 @@ public class VentanaBuscaminas extends javax.swing.JFrame {
                 .addComponent(textoCantidadBombas, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cantidadDeBombas, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(botonCambioModo, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -153,7 +181,8 @@ public class VentanaBuscaminas extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(textoCantidadBombas, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cantidadDeBombas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cantidadDeBombas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(botonCambioModo))
                 .addGap(7, 7, 7))
         );
 
@@ -161,6 +190,7 @@ public class VentanaBuscaminas extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox botonCambioModo;
     private javax.swing.JTextField cantidadDeBombas;
     private javax.swing.JPanel panelCasillas;
     private javax.swing.JPanel panelPrincipal;

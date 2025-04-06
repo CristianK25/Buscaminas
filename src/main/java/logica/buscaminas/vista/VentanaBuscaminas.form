@@ -30,6 +30,8 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="cantidadDeBombas" min="-2" pref="34" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
+              <Component id="botonCambioModo" min="-2" pref="146" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -41,6 +43,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="textoCantidadBombas" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
                   <Component id="cantidadDeBombas" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="botonCambioModo" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
           </Group>
@@ -121,7 +124,30 @@
     <Component class="javax.swing.JTextField" name="cantidadDeBombas">
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+        </Property>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Segoe UI" size="14" style="3"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="66" green="66" red="0" type="rgb"/>
+        </Property>
+        <Property name="caretColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="66" green="66" red="0" type="rgb"/>
+        </Property>
         <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="botonCambioModo">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Segoe UI Black" size="14" style="3"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="66" green="66" red="0" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Colocar Bandera"/>
       </Properties>
     </Component>
   </SubComponents>

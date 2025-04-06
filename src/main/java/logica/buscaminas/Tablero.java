@@ -29,7 +29,7 @@ public final class Tablero {
             case MEDIO -> cantidadBombas = 4;
             case DIFICIL -> cantidadBombas = 5;
         }
-        
+        int cantidadBombasRestantes = cantidadBombas;
         for (Casilla[] arregloCasilla : arregloCasillas) {
             for (int j = 0; j < arregloCasilla.length; j++) {
                 Casilla casilla = new Casilla();
@@ -37,14 +37,14 @@ public final class Tablero {
             } 
         }
         
-        while(cantidadBombas != 0){
+        while(cantidadBombasRestantes != 0){
             int fila = random.nextInt(0, 8), columna = random.nextInt(0, 8);
             // Evitar zona central (ej: radio de 1 casilla alrededor del centro)
             boolean esCentro = Math.abs(fila - arregloCasillas.length/2) <= 1 && Math.abs(columna - arregloCasillas.length/2) <= 1;
             if (esCentro) continue;
             if(!arregloCasillas[fila][columna].isTieneBomba()){
                 arregloCasillas[fila][columna].setTieneBomba(true);
-                cantidadBombas--;
+                cantidadBombasRestantes--;
             }
         }
     }
