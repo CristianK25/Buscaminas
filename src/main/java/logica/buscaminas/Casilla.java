@@ -6,6 +6,7 @@ package logica.buscaminas;
  */
 public class Casilla {
     private boolean tieneBomba;
+    private boolean casillaRevelada = false;
     private int [] posicion = new int[2];
     private int cantidadBombasEnRadio;
 
@@ -17,12 +18,16 @@ public class Casilla {
         this.tieneBomba = tieneBomba;
     }
 
-    public int[] getPosicion() {
-        return posicion;
+    public void setCasillaRevelada(boolean casillaRevelada) {
+        this.casillaRevelada = casillaRevelada;
     }
 
-    public void setPosicion(int[] posicion) {
-        this.posicion = posicion;
+    public boolean isCasillaRevelada() {
+        return casillaRevelada;
+    }
+
+    public int[] getPosicion() {
+        return posicion;
     }
 
     public int getCantidadBombasEnRadio() {

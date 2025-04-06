@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import logica.buscaminas.Casilla;
 import logica.buscaminas.Dificultad;
 import logica.buscaminas.Tablero;
 /**
@@ -15,12 +16,32 @@ import logica.buscaminas.Tablero;
 public class VentanaBuscaminas extends javax.swing.JFrame {
     private Tablero tablero;
     private Dificultad dificultad;
+    private JButton[][] botonesTablero;
     /**
      * Creates new form VentanaBuscaminas
      */
     public VentanaBuscaminas() {
         eleccionDificultad();
         initComponents();
+        cargarBotones();
+        this.setLocationRelativeTo(null); // Centra la ventana
+    }
+
+    /**
+     * Reinicia la eleccion de dificultad, la carga de botones y del tablero en 
+     * caso de que el jugador pierda
+     */
+    private void reiniciarJuego(){
+        eleccionDificultad();
+        panelCasillas.removeAll();
+        cargarBotones();
+    }
+    
+    /**
+     * Carga los botones en el panel destinado a las casillas
+     */
+    private void cargarBotones(){
+        botonesTablero = new JButton[8][8];
         // En tu método initComponents() o constructor:
          panelCasillas.setLayout(new GridLayout(8, 8));
     
@@ -36,14 +57,18 @@ public class VentanaBuscaminas extends javax.swing.JFrame {
                 //Accion del boton al pulsarlo dependiendo si esta activado el modo bandera
                 boton.addActionListener(e -> 
                         manejarCasillas(new int[]{fila, columna}, boton));
+                botonesTablero[fila][columna] = boton;
                 panelCasillas.add(boton);
             }
         }
         this.pack(); // Ajusta el JFrame al tamaño preferido de sus componentes
-        this.setLocationRelativeTo(null); // Centra la ventana
         cantidadDeBombas.setText(String.valueOf(tablero.getCantidadBombas()));
     }
-
+    
+    /***
+     * JOptionPane con una lista para presentarle las dificultades 
+     * disponibles al jugador
+     */
     private void eleccionDificultad(){
         dificultad = null;
         while (dificultad == null){
@@ -69,7 +94,9 @@ public class VentanaBuscaminas extends javax.swing.JFrame {
     }
     
     /**
-     * 
+     * Verifica en que modo esta la casilla y si tiene bandera o no. En caso de estar
+     * en modo descubrir, llama al metodo manejar la cantidad de bombas para saber si 
+     * la casilla tiene bombas, y en caso de no tener cuantas tiene en su radio
      * @param pos
      * @param boton 
      */
@@ -81,15 +108,38 @@ public class VentanaBuscaminas extends javax.swing.JFrame {
                 boton.setText("🚩");
             } else boton.setText("");
         }else if("".equals(boton.getText())) {
-            tablero.manejarCantidadBombas();
-            /* Para poner bombas cuando pierda
-            boton.setForeground(Color.BLACK);
-            boton.setText("💣");
-            */
-            
+            if (tablero.arregloCasillas[i][j].isTieneBomba()){
+                mostrarBombas();
+                JOptionPane.showMessageDialog(null,"¡¡PERDISTE!!","",JOptionPane.ERROR_MESSAGE,null);
+                reiniciarJuego();
+            }else
+            efectoCascada(i,j);
         }       
     }
     
+    /**
+     * Muestra la posicion de todas las bombas del tablero
+     */
+    private void mostrarBombas(){
+        for (int i=0; i<botonesTablero.length;i++){
+            for (int j=0;j<botonesTablero[i].length;j++){
+                if (tablero.arregloCasillas[i][j].isTieneBomba()){
+                    botonesTablero[i][j].setForeground(Color.BLACK);
+                    botonesTablero[i][j].setText("💣");
+                    botonesTablero[i][j].setEnabled(false);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Verifica si el boton pulsado tiene bombas en un radio de 1 casilla. 
+     * Si una casilla de 1 radio no tiene bombas, se verificara tambien si tiene 
+     * bombas en un radio. y asi hasta que por lo menos tengan 1 bomba en ese radio.
+     */
+    private void efectoCascada(int filaInicial,int columnaInicial){
+        
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
