@@ -3,9 +3,12 @@ package logica.buscaminas.vista;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.util.LinkedList;
+import java.util.Queue;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 import logica.buscaminas.Casilla;
 import logica.buscaminas.Dificultad;
 import logica.buscaminas.Tablero;
@@ -106,7 +109,11 @@ public class VentanaBuscaminas extends javax.swing.JFrame {
             if("".equals(boton.getText())) {
                 boton.setForeground(Color.red);
                 boton.setText("🚩");
-            } else boton.setText("");
+                cantidadDeBombas.setText(String.valueOf(Integer.parseInt(cantidadDeBombas.getText())-1));
+            } else {
+                boton.setText("");
+                cantidadDeBombas.setText(String.valueOf(Integer.parseInt(cantidadDeBombas.getText())+1));
+            }
         }else if("".equals(boton.getText())) {
             if (tablero.arregloCasillas[i][j].isTieneBomba()){
                 mostrarBombas();
@@ -138,7 +145,71 @@ public class VentanaBuscaminas extends javax.swing.JFrame {
      * bombas en un radio. y asi hasta que por lo menos tengan 1 bomba en ese radio.
      */
     private void efectoCascada(int filaInicial,int columnaInicial){
+        Queue<int[]> cola = new LinkedList<>();
+        cola.add(new int[]{filaInicial,columnaInicial});
         
+        while (!cola.isEmpty()){
+            int[] pos = cola.poll();
+            int fila = pos[0], columna = pos[1];
+            
+            // Si la casilla ya fue revelada, la ignoramos
+            if (tablero.arregloCasillas[fila][columna].isRevelada()) {
+                continue;
+            }
+            
+            // Marcar como revelada en el modelo
+            tablero.arregloCasillas[fila][columna].setRevelada(true);
+            
+             // Contar bombas adyacentes
+            int bombasAdyacentes = contarBombasAdyacentes(fila, columna);
+            // Actualizar el botón en la UI
+            if (bombasAdyacentes > 0) {
+                Color color;
+                switch (bombasAdyacentes) {
+                    case 1: color = new Color(46, 125, 50);  // Verde oscuro
+                            break;
+                    case 2: color = new Color(21, 101, 192); // Azul oscuro
+                            break;
+                    case 3: color = new Color(211, 47, 47);  // Rojo oscuro
+                            break;
+                    case 4: color = new Color(106, 27, 154); // Púrpura oscuro
+                            break;
+                    default: color = Color.BLACK;
+                }
+                botonesTablero[fila][columna].setForeground(color);
+                botonesTablero[fila][columna].setText(String.valueOf(bombasAdyacentes));
+                botonesTablero[fila][columna].setOpaque(true);
+                botonesTablero[fila][columna].setContentAreaFilled(false); // Fondo transparente
+                botonesTablero[fila][columna].setBorderPainted(false); // Sin borde
+            } else {
+                botonesTablero[fila][columna].setText("");
+            }
+            botonesTablero[fila][columna].setEnabled(false);
+            
+            // Si no hay bombas alrededor, agregar vecinos a la cola
+            if (bombasAdyacentes == 0) {
+                for (int i = Math.max(0, fila - 1); i <= Math.min(7, fila + 1); i++) {
+                    for (int j = Math.max(0, columna - 1); j <= Math.min(7, columna + 1); j++) {
+                        // No agregar la misma casilla ni casillas con bandera
+                        if ((i != fila || j != columna) && !"🚩".equals(botonesTablero[i][j].getText())) {
+                            cola.add(new int[]{i, j});
+                        }
+                    }
+                }
+            } 
+        }       
+    }
+    
+    private int contarBombasAdyacentes(int fila,int columna){
+        int bombas = 0;
+        for (int i = Math.max(0, fila - 1); i <= Math.min(7, fila + 1); i++) {
+            for (int j = Math.max(0, columna - 1); j <= Math.min(7, columna + 1); j++) {
+                if (tablero.arregloCasillas[i][j].isTieneBomba()) {
+                    bombas++;
+                }
+            }
+        }
+        return bombas;
     }
     /**
      * This method is called from within the constructor to initialize the form.

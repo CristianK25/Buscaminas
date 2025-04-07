@@ -25,9 +25,9 @@ public final class Tablero {
     public void cargarTablero(){
         Random random = new Random();
         switch (dificultad) {
-            case FACIL -> cantidadBombas = 3;
-            case MEDIO -> cantidadBombas = 4;
-            case DIFICIL -> cantidadBombas = 5;
+            case FACIL -> cantidadBombas = 8;
+            case MEDIO -> cantidadBombas = 16;
+            case DIFICIL -> cantidadBombas = 26;
         }
         int cantidadBombasRestantes = cantidadBombas;
         for (Casilla[] arregloCasilla : arregloCasillas) {
