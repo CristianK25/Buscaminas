@@ -20,6 +20,7 @@ public class VentanaBuscaminas extends javax.swing.JFrame {
     private Tablero tablero;
     private Dificultad dificultad;
     private JButton[][] botonesTablero;
+    
     /**
      * Creates new form VentanaBuscaminas
      */
@@ -121,7 +122,35 @@ public class VentanaBuscaminas extends javax.swing.JFrame {
                 reiniciarJuego();
             }else
             efectoCascada(i,j);
+            verificarVictoria();
         }       
+    }
+    
+    private void verificarVictoria(){
+        for(int i=0;i<botonesTablero.length;i++){
+            for(int j=0;j<botonesTablero[i].length;j++){
+                if(botonesTablero[i][j].isEnabled()) return;
+                else if (banderasBienColocadas()){
+                    mostrarBombas();
+                    JOptionPane.showMessageDialog(null,"Has ganado");
+                    reiniciarJuego();
+                }
+            }
+        }
+    }
+    
+    /**
+     * Verifica si las banderas estan en lugares en donde hay bombas
+     */
+    private boolean banderasBienColocadas(){
+        int cantidadBanderas = tablero.getCantidadBombas();
+        for(int i=0;i<botonesTablero.length;i++){
+            for(int j=0;j<botonesTablero[i].length;j++){
+               if("🚩".equals(botonesTablero[i][j].getText()) && tablero.arregloCasillas[i][j].isTieneBomba())
+                   cantidadBanderas--;
+            }
+        }
+        return cantidadBanderas == 0;
     }
     
     /**
